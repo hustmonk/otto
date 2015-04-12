@@ -21,11 +21,11 @@ def write(fin, fout, train):
         ks = []
         for i in arr[1:]:
             if float(i) > 10:
-                ks.append("X")
+                ks.append("-1")
             else:
                 ks.append(i)
-        feature = " ".join( [ str(i)+"_"+ks[i] for i in range(len(ks))])
-        featurev = " ".join( [ str(i)+":"+arr[i] for i in range(1, len(arr))])
+        feature = " ".join( [ str(i)+"_"+ks[i] for i in range(len(ks)) if float(ks[i]) > 0])
+        featurev = " ".join( [ str(i)+":"+ks[i] for i in range(len(ks)) if float(ks[i]) > 0 ])
         fout.write("%s %s|f %s |v %s\n" % (label, id, feature, featurev))
     fout.close()
 

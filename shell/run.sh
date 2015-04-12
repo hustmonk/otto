@@ -6,5 +6,5 @@ function run() {
     #$vw -t -i ${train}.model.vw --oaa 9 $test -p ${train}.pred -r ${train}.raw -a >xy
     $vw -t -i ${train}.model.vw --oaa 9 $test -p ${train}.pred -r ${train}.raw
 }
-#run train.txt1 train.txt2
+run train.txt1 train.txt2
 run train.txt test.txt 

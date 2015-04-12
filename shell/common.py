@@ -25,3 +25,11 @@ def getpredict(arr):
     sum_pred = sum(pred)
     pred = [k/sum_pred for k in pred]
     return pred
+
+if __name__ == "__main__":
+    for i in range(100):
+        loss = 0
+        for j in range(10):
+            loss += logloss(i/100.0, 0)
+        loss += logloss(i/100.0, 1)
+        print i,loss

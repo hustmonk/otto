@@ -22,5 +22,6 @@ for line in fin:
 #for i in range(1, len(header)):
 #    print header[i],len(counts[i]),counts[i]
 for i in range(1, len(header)):
+    print header[i],len(counts[i]),"x"
     for (k,v) in counts[i].items():
         print k,v
