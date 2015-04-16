@@ -10,6 +10,28 @@ from lasagne.nonlinearities import softmax
 from lasagne.updates import nesterov_momentum
 from nolearn.lasagne import NeuralNet
 
+import sys
+train_file = sys.argv[1]
+test_file = sys.argv[2]
+VALID = False
+def normal(X):
+    Y = np.array(X)
+    X.clip(0, 1, X)
+    Y.clip(0, 10, Y)
+    Y = np.log(Y+1)
+    XY = []
+    for i in range(X.shape[0]):
+        xy = X[i,:].tolist() + Y[i,:].tolist()
+        XY.append(xy)
+    
+    X = np.array(XY)
+
+    print X[0]
+    return X
+
+if sys.argv[3] == 'True':
+    VALID = True
+out_dir = sys.argv[4]
 def load_train_data(path):
     df = pd.read_csv(path)
     X = df.values.copy()
@@ -17,19 +39,23 @@ def load_train_data(path):
     X, labels = X[:, 1:-1].astype(np.float32), X[:, -1]
     encoder = LabelEncoder()
     y = encoder.fit_transform(labels).astype(np.int32)
+    X = normal(X)
     scaler = StandardScaler()
     X = scaler.fit_transform(X)
-    print X[0]
     return X, y, encoder, scaler
 
 def load_test_data(path, scaler):
     df = pd.read_csv(path)
     X = df.values.copy()
-    X, ids = X[:, 1:].astype(np.float32), X[:, 0].astype(str)
+    if VALID:
+        X, ids = X[:, 1:-1].astype(np.float32), X[:, 0].astype(str)
+    else:
+        X, ids = X[:, 1:].astype(np.float32), X[:, 0].astype(str)
+    X = normal(X)
     X = scaler.transform(X)
     return X, ids
 
-def make_submission(clf, X_test, ids, encoder, name='my_neural_net_submission.csv'):
+def make_submission(clf, X_test, ids, encoder, name=out_dir+'my_neural_net_submission.csv'):
     y_prob = clf.predict_proba(X_test)
     with open(name, 'w') as f:
         f.write('id,Class_1,Class_2,Class_3,Class_4,Class_5,Class_6,Class_7,Class_8,Class_9\n')
@@ -38,9 +64,6 @@ def make_submission(clf, X_test, ids, encoder, name='my_neural_net_submission.cs
             f.write(probas)
             f.write('\n')
     print("Wrote submission to file {}.".format(name))
-import sys
-train_file = sys.argv[1]
-test_file = sys.argv[2]
 X, y, encoder, scaler = load_train_data(train_file)
 
 X_test, ids = load_test_data(test_file, scaler)
