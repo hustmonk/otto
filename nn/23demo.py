@@ -32,7 +32,9 @@ def load_test_data(path, scaler):
 def make_submission(clf, X_test, ids, encoder, name='my_neural_net_submission.csv.2'):
     y_prob = clf.predict_proba(X_test)
     with open(name, 'w') as f:
-        f.write('id,Class_1,Class_2,Class_3,Class_4,Class_5,Class_6,Class_7,Class_8,Class_9\n')
+        f.write('id,')
+        f.write(','.join(encoder.classes_))
+        f.write('\n')
         for id, probs in zip(ids, y_prob):
             probas = ','.join([id] + map(str, probs.tolist()))
             f.write(probas)
