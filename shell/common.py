@@ -17,7 +17,10 @@ def logloss(p, y):
     return -log(p) if y == 1. else -log(1. - p)
 
 def predict(x):
-    return 1. / (1. + exp(-max(min(x, 35.), -35.)))
+    p = 1. / (1. + exp(-max(min(x, 35.), -35.)))
+    if p < 0.01:
+        p = 0.01
+    return p
 
 def getpredict(arr):
     pred = [predict(float(k.split(":")[1])) for k in arr]

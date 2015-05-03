@@ -10,7 +10,7 @@ files = ["my_neural_net_submission.csv0","my_neural_net_submission.csv1","my_neu
 fins = []
 fout = open("sub.csv","w")
 #for file in files:
-for i in range(20):
+for i in range(10):
     fin = open("result/my_neural_net_submission.csv" + str(i))
     head = fin.next()
     fins.append(fin)
@@ -31,7 +31,10 @@ for line in fins[0]:
             p += preds[j][i]
             pd.append("%.2f" % preds[j][i])
         print pd
-        ps.append("%.3f" % (p/len(fins)))
+        p = p/len(fins)
+        if p < 0.005:
+            p = 0.005
+        ps.append("%.3f" % (p))
     fout.write("%s,%s\n" % (id,",".join(ps)))
 
 fout.close()

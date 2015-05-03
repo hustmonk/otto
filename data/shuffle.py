@@ -19,12 +19,14 @@ def shuffle(fin, fout, bl):
     random.shuffle(items)
     for i in items:
         fout.write(i)
+    """
     random.shuffle(items)
     for i in items:
         fout.write(i)
     random.shuffle(items)
     for i in items:
         fout.write(i)
+    """
 
 
 shuffle("../data/train.csv", "train.csv.shuffle",True)
